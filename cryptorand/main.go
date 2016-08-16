@@ -22,7 +22,7 @@ func GenerateRandomString(s int) (string, error) {
 
 func main() {
 	token, err := GenerateRandomString(32)
-	if err != nil {.
+	if err != nil {
 		fmt.Println("Erreur", err)
 	}
 	fmt.Println("clé aléatoire : ", token)
