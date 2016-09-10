@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"html/template"
+	"net/http"
 	"os"
 )
 
@@ -82,6 +83,53 @@ func main() {
 	// III -
 	//structure conditionnelles
 
-	// todo p2
+	// serveur pour le rendu des templates
+	http.HandleFunc("/3", handler)
 
+	// le 1er template est le template principale suivi des templates dépendants
+	testTemplateCond1, err = template.ParseFiles("cond1.gohtml", "foot.gohtml")
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("\r\n", "serveur http sur port 3000...", "\r\n")
+	http.ListenAndServe(":3000", nil)
+
+	// you can declare multiple uniquely named templates
+
+}
+
+// III -
+//structure conditionnelles
+var testTemplateCond1 *template.Template
+var testCond1RequestCnt int
+
+//
+type ViewData struct {
+	Name        string
+	StringArray []string
+	DogArray    []Dog
+}
+
+func handler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	testCond1RequestCnt++
+
+	vd := ViewData{
+		Name:        "John Smith",
+		StringArray: []string{"item 1", "item 2", "item 3", "item 4"},
+		DogArray: []Dog{
+			{Name: "Rex", Age: 8},
+			{Name: "Lisa", Age: 3},
+		},
+	}
+	// on met des données qui change une fois sur deux
+	if testCond1RequestCnt%2 == 0 {
+		vd.Name = ""
+	}
+
+	err := testTemplateCond1.Execute(w, vd)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }

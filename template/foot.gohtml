@@ -1,0 +1,14 @@
+{{/* footer est l'identifiant du template */}}
+{{define "footer"}}
+  <footer>
+    <p>
+      Copyright ...
+    </p>
+  </footer>
+{{end}}
+
+{{/* on peut passer un parametres a un template */}}
+{{/* Note : on peut appeler un template dans un autre */}}
+{{define "param-widget"}}
+  <strong>Thanks {{.}}!</strong>
+{{end}}

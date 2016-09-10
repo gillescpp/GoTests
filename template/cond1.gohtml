@@ -1,0 +1,45 @@
+<h3>Hello {{if .Name -}} {{.Name}} {{else}} M. X {{end}}!</h3>  
+
+{{/*                    ^ pour supprimer cet espace, on place un "-" pour faire
+      supprimer les espaces aprés -}} ou avant {{- le tag. Cela ne supprime pas 
+	  les espaces que pourrer induire .Name */}}
+	
+<p>
+{{if .Name}}
+Nice to see you
+{{- else}}
+We don't know you ?
+{{- end}}!
+</p>
+
+<br>
+
+
+{{if .StringArray}}  {{/* pas de besoin de creer <ul> si le tableau est vide ou nil */}}
+{{range .StringArray}}
+<ul>
+	<li>{{.}}</li> {{/* on n'est dans le context d'un item du tableau : . represente un element */}}
+</ul>
+{{end}}
+{{end}}
+
+
+<br>
+
+
+{{if .DogArray}}  
+{{range .DogArray}}
+<ul>
+	<li>{{.Name}} is {{.Age}} years old</li> 
+</ul>
+{{end}}
+{{end}}
+
+
+{{/* inclusion d'un autre template simple de par son nom */}}
+<hr>
+{{template "footer"}}
+
+{{/* template ou passe un parametre (qui deviens le . dans le contexte du template)*/}}
+<hr>
+{{template "param-widget" .Name}}
