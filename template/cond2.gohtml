@@ -1,0 +1,58 @@
+{{/* admin link for admin */}}
+{{if .Admin}}
+<div id="admin">
+	<ul>
+		<li><a href="#">Admin Panel</a></li>
+	</ul>
+</div>
+{{end}}
+
+{{/* Fonctions :
+	and .a .b 	: a && b
+	or .a .b 	: a || b
+    eq .a .b 	: a == b
+    ne .a .b 	: a != b
+    lt .a .b 	: a < b
+    le .a .b 	: a <= b
+    gt .a .b 	: a > b
+    ge .a .b 	: a >= b
+
+ */}}
+<h3>Hello {{if .Name -}} {{.Name}} {{else}} M. X {{end}}!</h3> 
+{{if .Admin}}
+<em>You are ADMIN</em>
+{{else if (gt .Level 1)}}
+<em>You are skilled user</em>
+{{else}}
+<em>You are newb</em>
+{{end}}
+
+
+{{/* table ArrayLink de string */}}
+{{if .ArrayLink}}
+<div>
+	<table>
+		<tr>
+		  <th>Data</th>
+		  {{if (or .Admin (gt .Level 2) )}}
+		  <th>Delete</th>
+		  {{end}}
+		</tr>
+
+		{{/* dans le range le "." correspond à un element, si on veut acceder
+		à des elements en dehors de ce seul element, on peut alors 
+		acceder à la variable passé au template grace à $. */}}		
+		
+		{{range .ArrayLink}}
+		  <tr>
+			{{if .}}
+				<th>{{.}}</th>
+				{{if (or $.Admin (gt $.Level 2) )}}
+				<th><a href="#">Delete!</a></th>
+				{{end}}
+			{{end}}
+		  </tr>
+		{{end}}
+	</table>
+</div>
+{{end}}

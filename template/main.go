@@ -81,41 +81,54 @@ func main() {
 	}
 
 	// III -
-	//structure conditionnelles
+	//structure conditionnelles et fonctions
 
 	// serveur pour le rendu des templates
-	http.HandleFunc("/3", handler)
+	http.HandleFunc("/1", handler1)
+	http.HandleFunc("/2", handler2)
 
-	// le 1er template est le template principale suivi des templates dépendants
+	// le 1er template est le template principale suivi des templates dont il dépand
 	testTemplateCond1, err = template.ParseFiles("cond1.gohtml", "foot.gohtml")
+	if err != nil {
+		panic(err)
+	}
+	testTemplateCond2, err = template.ParseFiles("cond2.gohtml", "foot.gohtml")
 	if err != nil {
 		panic(err)
 	}
 
 	fmt.Println("\r\n", "serveur http sur port 3000...", "\r\n")
 	http.ListenAndServe(":3000", nil)
-
-	// you can declare multiple uniquely named templates
-
 }
 
 // III -
 //structure conditionnelles
 var testTemplateCond1 *template.Template
+var testTemplateCond2 *template.Template
 var testCond1RequestCnt int
+var testCond2RequestCnt int
 
-//
-type ViewData struct {
+//structure de donnée transmi au templa cond1
+type ViewData1 struct {
 	Name        string
 	StringArray []string
 	DogArray    []Dog
 }
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
-	testCond1RequestCnt++
+//structure de donnée transmi au templa cond2
+type ViewData2 struct {
+	Login     string
+	Name      string
+	Admin     bool
+	Level     int
+	ArrayLink []string
+}
 
-	vd := ViewData{
+//page template avec conditions
+func handler1(w http.ResponseWriter, r *http.Request) {
+	testCond1RequestCnt++ //note : devrait être protegé par un mutex ou incrementé par atomic.AddInt64
+
+	vd := ViewData1{
 		Name:        "John Smith",
 		StringArray: []string{"item 1", "item 2", "item 3", "item 4"},
 		DogArray: []Dog{
@@ -128,7 +141,57 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		vd.Name = ""
 	}
 
+	w.Header().Set("Content-Type", "text/html")
 	err := testTemplateCond1.Execute(w, vd)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+//page template avec fonctions
+func handler2(w http.ResponseWriter, r *http.Request) {
+	testCond2RequestCnt++ //note : devrait être protegé par un mutex ou incrementé par atomic.AddInt64
+
+	vd := ViewData2{}
+	// on met des données qui change a chaque refresh
+	if testCond2RequestCnt == 1 {
+		vd = ViewData2{
+			Login:     "TheAdmin",
+			Name:      "IT Team",
+			Admin:     true,
+			Level:     3,
+			ArrayLink: []string{"Link1", "", "Link2", "Link3"},
+		}
+	} else if testCond2RequestCnt == 2 {
+		vd = ViewData2{
+			Login:     "puser3",
+			Name:      "Modo!",
+			Admin:     false,
+			Level:     3,
+			ArrayLink: []string{"My test 1", "My test 21", "My test 61", "My test 8"},
+		}
+	} else if testCond2RequestCnt == 3 {
+		vd = ViewData2{
+			Login:     "advuser2",
+			Name:      "John Adv",
+			Admin:     false,
+			Level:     2,
+			ArrayLink: []string{"Cassandra", "redis", "couchdb", "influxdb", "mysql", "mssql"},
+		}
+
+	} else {
+		testCond2RequestCnt = 0
+		vd = ViewData2{
+			Login:     "newb1",
+			Name:      "coco 1",
+			Admin:     false,
+			Level:     1,
+			ArrayLink: []string{"MyLink", ""},
+		}
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+	err := testTemplateCond2.Execute(w, vd)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}

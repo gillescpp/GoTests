@@ -16,11 +16,11 @@ We don't know you ?
 
 
 {{if .StringArray}}  {{/* pas de besoin de creer <ul> si le tableau est vide ou nil */}}
-{{range .StringArray}}
 <ul>
+{{range .StringArray}}
 	<li>{{.}}</li> {{/* on n'est dans le context d'un item du tableau : . represente un element */}}
-</ul>
 {{end}}
+</ul>
 {{end}}
 
 
@@ -28,11 +28,11 @@ We don't know you ?
 
 
 {{if .DogArray}}  
-{{range .DogArray}}
 <ul>
+{{range .DogArray}}
 	<li>{{.Name}} is {{.Age}} years old</li> 
-</ul>
 {{end}}
+</ul>
 {{end}}
 
 
