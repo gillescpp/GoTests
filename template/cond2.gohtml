@@ -56,3 +56,15 @@
 	</table>
 </div>
 {{end}}
+
+<br>
+
+{{/* appel fonction (receveir sur la structure donnée) HasPermission avec parametre */}}
+{{if .HasPermission "autorisation2"}}
+	<h3>autorisation2 activated</h3>
+{{end}}
+
+{{/* appel d'une fonction fourni au template (template.FuncMap)) */}}
+{{if IsInternal}}
+	<h3>IsInternal return true</h3>
+{{end}}

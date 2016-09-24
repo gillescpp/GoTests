@@ -92,7 +92,11 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	testTemplateCond2, err = template.ParseFiles("cond2.gohtml", "foot.gohtml")
+	// template avec lot de fonction fourni
+	testTemplateCond2, err = template.New("cond2.gohtml").Funcs(
+		template.FuncMap{
+			"IsInternal": IsInternal,
+		}).ParseFiles("cond2.gohtml", "foot.gohtml")
 	if err != nil {
 		panic(err)
 	}
@@ -122,6 +126,24 @@ type ViewData2 struct {
 	Admin     bool
 	Level     int
 	ArrayLink []string
+}
+
+// fonction receveir qui pourra être appelé dans le template cond2
+func (c ViewData2) HasPermission(feature string) bool {
+	if feature == "autorisation2" && c.Level >= 2 {
+		return true
+	} else {
+		return false
+	}
+}
+
+//fonction classique qui poura qu'on va mettre a dispo du template cond2:
+// Celle-ci doit soit :
+// - retourner une seule valeur
+// - retourner une valeur en 1er et une error en deuxieme (qui fera échouer le template
+//   si la fonction retourne une valeur différente de nil)
+func IsInternal() bool {
+	return true
 }
 
 //page template avec conditions
