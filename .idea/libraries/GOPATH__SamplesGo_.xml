@@ -1,0 +1,35 @@
+<component name="libraryTable">
+  <library name="GOPATH &lt;SamplesGo&gt;">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../../../go_base" />
+      <root url="file://$PROJECT_DIR$/../../../go_newton_sqrt" />
+      <root url="file://$PROJECT_DIR$/../../../lib" />
+      <root url="file://$PROJECT_DIR$/../.." />
+      <root url="file://$PROJECT_DIR$/../../../golang.org" />
+      <root url="file://$PROJECT_DIR$/../../../gogs.slashtest.net" />
+      <root url="file://$PROJECT_DIR$/../../../4cdl" />
+      <root url="file://$PROJECT_DIR$/../../../chup" />
+      <root url="file://$PROJECT_DIR$/../../../gowiki" />
+      <root url="file://$PROJECT_DIR$/../../../gopkg.in" />
+      <root url="file://$PROJECT_DIR$/../../../9fans.net" />
+      <root url="file://$PROJECT_DIR$/../../../hello" />
+    </CLASSES>
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../../../go_base" />
+      <root url="file://$PROJECT_DIR$/../../../go_newton_sqrt" />
+      <root url="file://$PROJECT_DIR$/../../../lib" />
+      <root url="file://$PROJECT_DIR$/../.." />
+      <root url="file://$PROJECT_DIR$/../../../golang.org" />
+      <root url="file://$PROJECT_DIR$/../../../gogs.slashtest.net" />
+      <root url="file://$PROJECT_DIR$/../../../4cdl" />
+      <root url="file://$PROJECT_DIR$/../../../chup" />
+      <root url="file://$PROJECT_DIR$/../../../gowiki" />
+      <root url="file://$PROJECT_DIR$/../../../gopkg.in" />
+      <root url="file://$PROJECT_DIR$/../../../9fans.net" />
+      <root url="file://$PROJECT_DIR$/../../../hello" />
+    </SOURCES>
+    <excluded>
+      <root url="file://$PROJECT_DIR$" />
+    </excluded>
+  </library>
+</component>
