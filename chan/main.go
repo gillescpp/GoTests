@@ -45,23 +45,21 @@ func main() {
 	// -------------------------------------------
 	//timer
 	fmt.Println(" ---- Timer ---- ")
-	tick := time.Tick(100 * time.Millisecond)
+	tick := time.Tick(100 * time.Millisecond) //inutile de fermer ces channel (sinon il faut passer par un NewTicker)
 	end := time.After(500 * time.Millisecond)
-	for {
+
+	for bContinue := true; bContinue; {
 		select {
 		case <-tick:
 			fmt.Println("Tick.")
 		case <-end:
 			fmt.Println("Fin!")
-			return
+			bContinue = false
 		default:
 			fmt.Println("default")
 			time.Sleep(50 * time.Millisecond)
 		}
 	}
-	close(tick)
-	close(end)
-
 
 	// -------------------------------------------
 	//unbuffered chan : conduit d'un seul "slot"
@@ -74,20 +72,21 @@ func main() {
 	//on lance une goroutine consomateur
 	go func() {
 		fmt.Println("debut consommateur")
-		var batch []int
+		var batch []int = make([]int, iBatch)
 		iBPos := 0
 		for {
 			select {
-			x := <- ch2 :
+			case x := <-ch2:
 				if iBPos > 9 {
 					iBPos = 0
 					//record batch
-					fmt.Println("batch a! ")
+					fmt.Println("batch a! ", batch)
 				}
 				batch[iBPos] = x
 				iBPos++
+				wg2.Done()
 
-				<-time.After(500*time.Millisecond) :
+			case <-time.After(200 * time.Millisecond):
 				//recodd
 				fmt.Println("batch t! ")
 
@@ -97,15 +96,19 @@ func main() {
 
 	//producteur
 	fmt.Println("debut producteur : 200 messages")
-	for i := 0; i < 200; i++ {
-		//le chan n'ayant qu'un seul emplacement, il est bloqué
-		//jusqu' a que le message soit consommé
-		ch <- i
+	for i := 0; i < 205; i++ {
+		//le chan ayant plusieurs emplacement, il sera bloquant
+		//s'il est plein
+		wg2.Add(1)
+		ch2 <- i
+		if i%30 == 0 {
+			time.Sleep(300 * time.Millisecond)
+		} else {
+			time.Sleep(50 * time.Millisecond)
+		}
 	}
-	//fin d'emission
+	//attend la fin
+	wg2.Wait()
 	close(ch2)
 
-	//attend que le consomateur aient fini
-	fmt.Println("wait")
-	wg2.Wait()
 }
